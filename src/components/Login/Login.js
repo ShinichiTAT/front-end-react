@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Login.scss'
 import { useHistory } from "react-router-dom";
 import { toast } from 'react-toastify'
 import { loginUser } from "../../services/userService"
+
+
 const Login = (props) => {
-    let history = useHistory();
+    let history = useHistory()
 
     const [valueLogin, setValueLogin] = useState("")
     const [password, setPassword] = useState("")
@@ -33,10 +35,44 @@ const Login = (props) => {
             toast.error("Please enter your password")
             return
         }
-        await loginUser(valueLogin, password)
+        let respose = await loginUser(valueLogin, password)
+        if (respose && respose.data && +respose.data.EC === 0) {
+            //success
+            let data = {
+                isAuthenticated: true,
+                token: 'fake token'
+            }
+            sessionStorage.setItem('account', JSON.stringify(data));
+
+            history.push('/users')
+            window.location.reload()
+
+
+        }
+
+        if (respose && respose.data && +respose.data.EC !== 0) {
+            //error
+            toast.error(respose.data.EM)
+
+        }
+
+        console.log("check response:", respose.data)
 
 
     }
+    const handlePressEnter = (event) => {
+        if (event.charCode === 13 && event.code === "Enter") {
+            handleLogin()
+        }
+    }
+    useEffect(() => {
+        let session = sessionStorage.getItem('account')
+        if (session) {
+            history.push("/")
+        }
+
+    }, [])
+
     return (
         <div className="login-container">
             <div className="container ">
@@ -67,6 +103,7 @@ const Login = (props) => {
                             placeholder='Password'
                             value={password}
                             onChange={(event) => { setPassword(event.target.value) }}
+                            onKeyPress={(event) => handlePressEnter(event)}
                         />
                         <button className='btn btn-primary' onClick={() => handleLogin()}>Login</button>
                         <span className='text-center'>
