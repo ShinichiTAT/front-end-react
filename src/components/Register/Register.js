@@ -59,7 +59,7 @@ const Register = (props) => {
             setObjCheckInput({ ...defaultValidInput, isValidPassword: false })
             return false
         }
-        if (password != confirmPassword) {
+        if (password !== confirmPassword) {
             toast.error("Your password is not the same")
             setObjCheckInput({ ...defaultValidInput, isValidConfirmPassword: false })
             return false
