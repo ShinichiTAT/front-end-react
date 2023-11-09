@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import './User.scss'
 import { fetchAllUser, deleteUser } from "../../services/userService"
 import ReactPaginate from 'react-paginate'
 import { toast } from "react-toastify"
 import ModalDelete from "./ModalDelete"
 import ModalUser from "./ModalUser"
+
 
 const Users = (props) => {
 
@@ -21,9 +22,13 @@ const Users = (props) => {
 
     useEffect(() => {
         fetchUsers()
+
+
     }, [currentPage])
 
+
     const fetchUsers = async () => {
+
         let response = await fetchAllUser(currentPage, currentLimit)
         if (response && response.EC === 0) {
 
