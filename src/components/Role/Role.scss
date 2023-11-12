@@ -26,6 +26,13 @@
             cursor: pointer;
         }
     }
+
+    .table-role {
+        .delete {
+            cursor: pointer;
+            color: red;
+        }
+    }
 }
 
 .title-role h4 {
